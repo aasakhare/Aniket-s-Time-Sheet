@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Work Timesheet Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>My Work Timesheet</h1>
+
+  <!-- ENTRY FORM -->
+  <div class="entry">
+    <input type="date" id="date">
+    <input type="text" id="task" placeholder="Task / Activity">
+    <input type="time" id="start">
+    <input type="time" id="end">
+    <button onclick="addEntry()">Add Entry</button>
+  </div>
+
+  <!-- SUMMARY DASHBOARD -->
+  <div class="summary">
+    <div>
+      Today<br>
+      <span id="today">0</span> hrs
+    </div>
+    <div>
+      This Month<br>
+      <span id="month">0</span> hrs
+    </div>
+    <div>
+      This Year<br>
+      <span id="year">0</span> hrs
+    </div>
+  </div>
+
+  <!-- UNIQUE CARD-BASED DISPLAY -->
+  <h2>Work Log</h2>
+  <div id="entries">
+    <!-- Day-wise cards will be rendered here by script.js -->
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
