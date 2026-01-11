@@ -1,75 +1,83 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #F5F7FA;
-  padding: 30px;
-  color: #333;
+let entries = JSON.parse(localStorage.getItem("timesheetEntries")) || [];
+
+function showEntryForm() {
+  document.getElementById("entrySection").classList.remove("hidden");
+  document.getElementById("dateSection").classList.add("hidden");
 }
 
-h1 {
-  color: #0B3C5D;
-  margin-bottom: 20px;
+function showDateView() {
+  document.getElementById("dateSection").classList.remove("hidden");
+  document.getElementById("entrySection").classList.add("hidden");
 }
 
-/* DASHBOARD */
-.dashboard {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+function addEntry() {
+  const date = document.getElementById("date").value;
+  const task = document.getElementById("task").value;
+  const start = document.getElementById("start").value;
+  const end = document.getElementById("end").value;
+
+  if (!date || !task || !start || !end) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  const hours =
+    (new Date(`1970-01-01T${end}`) - new Date(`1970-01-01T${start}`)) / 3600000;
+
+  if (hours <= 0) {
+    alert("Invalid time range");
+    return;
+  }
+
+  entries.push({ date, task, start, end, hours });
+  localStorage.setItem("timesheetEntries", JSON.stringify(entries));
+
+  updateDashboard();
+  alert("Entry saved");
 }
 
-.card {
-  background: #ffffff;
-  padding: 20px;
-  width: 30%;
-  border-left: 5px solid #0B3C5D;
+function filterByDate() {
+  const selectedDate = document.getElementById("filterDate").value;
+  const container = document.getElementById("entries");
+  container.innerHTML = "";
+
+  let dailyTotal = 0;
+
+  entries
+    .filter(e => e.date === selectedDate)
+    .forEach(e => {
+      dailyTotal += e.hours;
+      container.innerHTML += `
+        <div>
+          <strong>${e.task}</strong><br>
+          ${e.start} – ${e.end} (${e.hours.toFixed(2)} hrs)
+        </div>`;
+    });
+
+  if (selectedDate) {
+    container.innerHTML += `
+      <div><strong>Total for day: ${dailyTotal.toFixed(2)} hrs</strong></div>`;
+  }
 }
 
-.card h3 {
-  margin: 0;
-  color: #0B3C5D;
+function updateDashboard() {
+  let total = 0, month = 0, year = 0;
+  const now = new Date();
+
+  entries.forEach(e => {
+    total += e.hours;
+    const d = new Date(e.date);
+
+    if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear())
+      month += e.hours;
+
+    if (d.getFullYear() === now.getFullYear())
+      year += e.hours;
+  });
+
+  document.getElementById("totalHours").innerText = total.toFixed(2);
+  document.getElementById("monthHours").innerText = month.toFixed(2);
+  document.getElementById("yearHours").innerText = year.toFixed(2);
 }
 
-.card p {
-  font-size: 28px;
-  margin-top: 10px;
-}
-
-/* ACTION BUTTONS */
-.actions {
-  margin-bottom: 25px;
-}
-
-.actions button {
-  padding: 10px 16px;
-  margin-right: 10px;
-  background: #0B3C5D;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* SECTIONS */
-.section {
-  background: #ffffff;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.hidden {
-  display: none;
-}
-
-/* FORM */
-input {
-  padding: 8px;
-  margin-right: 8px;
-  margin-bottom: 10px;
-}
-
-/* ENTRIES */
-#entries div {
-  padding: 10px;
-  margin-bottom: 6px;
-  border-left: 4px solid #0B3C5D;
-  background: #fff;
-}
+window.onload = updateDashboard;
