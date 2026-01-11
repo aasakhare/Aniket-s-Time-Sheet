@@ -2,45 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Work Timesheet Dashboard</title>
+  <title>Team Timesheet</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>My Work Timesheet</h1>
+<h1>Team Timesheet Dashboard</h1>
 
-  <!-- ENTRY FORM -->
-  <div class="entry">
-    <input type="date" id="date">
-    <input type="text" id="task" placeholder="Task / Activity">
-    <input type="time" id="start">
-    <input type="time" id="end">
-    <button onclick="addEntry()">Add Entry</button>
+<!-- DASHBOARD SUMMARY -->
+<div class="dashboard">
+  <div class="card">
+    <h3>Total Hours</h3>
+    <p id="totalHours">0</p>
   </div>
-
-  <!-- SUMMARY DASHBOARD -->
-  <div class="summary">
-    <div>
-      Today<br>
-      <span id="today">0</span> hrs
-    </div>
-    <div>
-      This Month<br>
-      <span id="month">0</span> hrs
-    </div>
-    <div>
-      This Year<br>
-      <span id="year">0</span> hrs
-    </div>
+  <div class="card">
+    <h3>This Month</h3>
+    <p id="monthHours">0</p>
   </div>
-
-  <!-- UNIQUE CARD-BASED DISPLAY -->
-  <h2>Work Log</h2>
-  <div id="entries">
-    <!-- Day-wise cards will be rendered here by script.js -->
+  <div class="card">
+    <h3>This Year</h3>
+    <p id="yearHours">0</p>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<!-- ACTION BUTTONS -->
+<div class="actions">
+  <button onclick="showEntryForm()">➕ Add Timesheet Entry</button>
+  <button onclick="showDateView()">📅 View by Date</button>
+</div>
 
+<!-- ENTRY FORM (HIDDEN BY DEFAULT) -->
+<div id="entrySection" class="section hidden">
+  <h2>Add Timesheet Entry</h2>
+  <input type="date" id="date">
+  <input type="text" id="task" placeholder="Task / Activity">
+  <input type="time" id="start">
+  <input type="time" id="end">
+  <button onclick="addEntry()">Save Entry</button>
+</div>
+
+<!-- DATE VIEW -->
+<div id="dateSection" class="section hidden">
+  <h2>View Entries by Date</h2>
+  <input type="date" id="filterDate" onchange="filterByDate()">
+  <div id="entries"></div>
+</div>
+
+<script src="./script.js"></script>
 </body>
 </html>
